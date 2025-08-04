@@ -5,7 +5,7 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import { plaidService } from '../../../services/plaidService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBankStatus } from '../../../contexts/bankStatusContext';
-import { config } from '../../../src/config/environment';
+import { config } from '../../../../src/config/environment';
 
 interface BankAccount {
   account_id: string;

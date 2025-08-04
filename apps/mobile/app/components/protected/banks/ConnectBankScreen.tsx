@@ -12,7 +12,7 @@ import { router } from 'expo-router';
 import { PlaidLinkComponent } from '../plaid/PlaidLink';
 import { plaidService } from '../../../services/plaidService';
 import { useBankStatus } from '../../../contexts/bankStatusContext';
-import { config } from '../../../src/config/environment';
+import { config } from '../../../../src/config/environment';
 
 export const ConnectBankScreen: React.FC = () => {
   const [isConnecting, setIsConnecting] = useState(false);

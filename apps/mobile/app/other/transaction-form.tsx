@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Button, Image, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { config } from '../src/config/environment';
+import { config } from '../../src/config/environment';
 
 export default function TransactionForm({ onClose }: { onClose: () => void }) {
   const [strAmount, setStrAmount] = useState('')
