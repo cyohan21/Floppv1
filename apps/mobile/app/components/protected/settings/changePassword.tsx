@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native'
-import { config } from '../../../src/config/environment';
+import { config } from '../../../../src/config/environment';
 
 type ChangePasswordProps = {
   onClose: () => void;

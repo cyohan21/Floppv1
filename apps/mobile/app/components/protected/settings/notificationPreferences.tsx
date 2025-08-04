@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Switch, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { config } from '../../../src/config/environment';
+import { config } from '../../../../src/config/environment';
 
 type NotificationPreferencesProps = {
   onClose: () => void;
