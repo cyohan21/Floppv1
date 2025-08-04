@@ -1,0 +1,1 @@
+export { ConnectBankScreen as default } from './components/protected/banks/ConnectBankScreen'; 

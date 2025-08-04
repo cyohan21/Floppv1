@@ -1,0 +1,114 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DEV_DB_URL")
+}
+
+model User {
+  id                 String        @id @default(uuid())
+  name               String
+  email              String        @unique
+  emailVerified      Boolean       @default(false)
+  image              String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @default(now())
+  username           String?       @unique
+  displayUsername    String?
+  firstName          String?
+  lastName           String?
+  currency           String?       @default("USD") // User's selected currency
+  walkthroughCompleted Boolean     @default(false) // Track if user completed initial walkthrough
+  isBankConnected    Boolean       @default(false)
+  cursor             String?
+  plaid_access_token String?
+  plaid_item_id      String?
+  categories         Category[]
+  transactions       Transaction[]
+  accounts           Account[]
+  sessions           Session[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @default(now())
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Transaction {
+  id          String      @id // Plaid transaction_id (no @default(uuid()))
+  userId      String
+  date        DateTime    // transaction date (date only, not datetime)
+  merchant    String      // merchant_name if available, else name
+  currency    String      // iso_currency_code
+  type        String      // "income" or "expense"
+  isPending   Boolean     // pending status
+  amount      Decimal     // absolute amount value
+  description String?     // name field for reference
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+  categoryId  String?     // optional for now since transactions start uncategorized
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([date])
+  @@index([type])
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  name         String
+  createdAt    DateTime      @default(now())
+  userId       String?
+  isHidden     Boolean       @default(false) // true for uncategorized category
+  color        String?       // hex color for category display
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([name, userId])
+}
